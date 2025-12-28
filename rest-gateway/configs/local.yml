@@ -1,0 +1,17 @@
+app:
+  env: dev
+  version: v0.0.1
+  name: rest-gateway-coderun
+
+server:
+  http:
+    host: localhost
+    port: 9090
+  read-timeout: 2s
+  write-timeout: 2s
+  idle-timeout: 40s
+
+services:
+  coderun-sso:
+    host: localhost
+    port: 50051

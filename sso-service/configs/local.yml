@@ -1,0 +1,29 @@
+app:
+  env: dev
+  version: v0.0.3
+  name: coderun-sso
+
+server:
+  grpc:
+    host: 0.0.0.0
+    port: 50051
+    protocol: tcp
+    tls:
+      enable: false
+  timeout: 2s
+
+secrets:
+  jwt:
+    private-key-path: ${PRIVATEKEY_PATH}
+    public-key-path: ${PUBLICKEY_PATH}
+    ttl: 24h
+    
+  mongo:
+    host: localhost
+    port: 27017
+    
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+    password: ${REDIS_PASSWORD}
+    refresh-ttl: 24h

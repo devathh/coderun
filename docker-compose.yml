@@ -1,0 +1,47 @@
+services: # so far, only for sso
+  coderun-sso:
+    container_name: coderun-sso
+    build: 
+      context: ./sso-service
+      dockerfile: Dockerfile
+    ports:
+      - 50051:50051
+    depends_on:
+      coderun-pg:
+        condition: service_healthy
+      coderun-redis:
+        condition: service_started
+    restart: unless-stopped
+
+  coderun-xcutr:
+    container_name: coderun-xcutr
+    build:
+      context: ./xcutr-service
+      dockerfile: Dockerfile
+    ports:
+      - 50052:50052
+    depends_on:
+      - coderun-sso
+
+  coderun-pg:
+    image: postgres
+    container_name: coderun-pg
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=password # change to real password
+      - POSTGRES_USER=user # change to real user
+      - POSTGRES_DB=coderun
+    healthcheck:
+      test: ["CMD-SHELL", "g_isready -U user -d coderun"]
+      interval: 5s
+      timeout: 30s
+      retries: 10
+    restart: unless-stopped  
+
+  coderun-redis:
+    image: redis
+    container_name: coderun-redis
+    ports:
+      - 6379:6379
+    restart: unless-stopped

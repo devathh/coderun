@@ -1,0 +1,36 @@
+app:
+  env: dev
+  version: v0.0.1
+  name: coderun-xcutr
+
+features:
+  clickhouse-enable: true
+
+server:
+  grpc:
+    host: 0.0.0.0
+    port: 50052
+    protocol: tcp
+    tls:
+      enable: false
+
+service:
+  max-timeout: 10s
+  log:
+    buf-size: 10
+
+secrets:
+  docker:
+    image-go: golang:1.25.5-alpine
+    image-python: python:3.11-alpine
+
+  jwt:
+    public-key-path: ${PUBLICKEY_PATH}
+
+  clickhouse:
+    host: ${CLICKHOUSE_HOST}
+    port: ${CLICKHOUSE_PORT}
+    password: ${CLICKHOUSE_PASSWORD}
+    username: ${CLICKHOUSE_USERNAME}
+    database: ${CLICKHOUSE_DATABASE}
+    

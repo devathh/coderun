@@ -1,0 +1,27 @@
+syntax = "proto3";
+package xcutr.v1;
+option go_package = "github.com/devathh/coderun/xcutr-service; xcutrpb";
+
+message Log {
+    string msg = 1;
+}
+
+message File {
+    string mime = 1;
+    string name = 2;
+    bytes body = 3;
+}
+
+service Xcutr {
+    // Execute the code
+    // REQUIRES: jwt-token
+    rpc Execute(ExecutionRequest) returns (stream Log);
+}
+
+message ExecutionRequest {
+    string language = 1;
+    repeated File files = 2;
+    int64 max_timeout = 3;
+}
+
+message Empty {}

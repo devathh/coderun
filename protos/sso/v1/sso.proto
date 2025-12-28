@@ -1,0 +1,59 @@
+syntax = "proto3";
+package sso.v1;
+option go_package = "github.com/devathh/coderun/sso-service/api; ssopb";
+
+// Domain model of sso service
+message User {
+    string id = 1;
+    string email = 2;
+    string username = 3;
+}
+
+message Token {
+    string access = 1;
+    string refresh = 2;
+}
+
+service SSO {
+    // Create new user n' generate a pair of tokens
+    rpc Register(RegisterRequest) returns (Token);
+    // Generate a pair of tokens
+    rpc Login(LoginRequest) returns (Token);
+    // Refresh the pair of tokens
+    rpc Refresh(RefreshRequest) returns (Token);
+
+    // Update data of user
+    // REQUIRES: jwt-token
+    rpc UpdateUser(UpdateRequest) returns (Empty);
+
+    // Get user by id
+    rpc GetUserByID(GetByIDRequest) returns (User);
+    // Get self user
+    // REQUIRES: jwt-token
+    rpc GetSelf(Empty) returns (User);
+}
+
+message RegisterRequest {
+    string email = 1;
+    string username = 2;
+    string password = 3;
+}
+
+message LoginRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message RefreshRequest {
+    string refresh_token = 1;
+}
+
+message UpdateRequest {
+    string username = 1;
+}
+
+message GetByIDRequest {
+    string user_id = 1;
+}
+
+message Empty {}
